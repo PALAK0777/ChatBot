@@ -1,9 +1,0 @@
-{
-  "env": "node",
-  "name": "chatbot-backend",
-  "buildCommand": "npm install",
-  "startCommand": "node server.js",
-  "envVars": {
-    "MONGO_URI": "mongodb+srv://Krishnaji:palak07@cluster07.aqdgy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster07"
-  }
-}

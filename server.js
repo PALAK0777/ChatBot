@@ -7,7 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500'], // Allow both origins
+    credentials: true,
+}));
 app.use(bodyParser.json());
 
 // MongoDB Connection
@@ -39,8 +42,23 @@ app.post('/api/history', async (req, res) => {
 
 // API to fetch chat history
 app.get('/api/history', async (req, res) => {
-    const history = await ChatHistory.find().sort({ timestamp: -1 });
-    res.json(history);
+    try {
+        const history = await ChatHistory.find().sort({ timestamp: -1 });
+        res.json(history);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch chat history' });
+    }
+});
+
+// API to delete chat history
+app.delete('/api/history/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await ChatHistory.findByIdAndDelete(id);
+        res.status(200).json({ message: 'Chat history deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete chat history' });
+    }
 });
 
 // Start the server
